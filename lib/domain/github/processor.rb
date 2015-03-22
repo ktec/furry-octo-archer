@@ -36,7 +36,8 @@ module Domain
           #anemone.storage = Anemone::Storage.MongoDB
           #anemone.storage = Anemone::Storage.Redis
           anemone.on_every_page do |page|
-            process_page(page) if page.code == 200 && page.url.to_s !~ Github::INVALID_URLS
+            process_page(page) if page.code == 200 &&
+                                  page.url.to_s !~ Github::INVALID_URLS
           end
         end
       end
