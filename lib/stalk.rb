@@ -3,7 +3,7 @@ require 'byebug'
 require './db/database'
 require './lib/domain/github'
 
-Domain::Github::Processor.new.run
+Domain::Github::Processor.new("https://github.com/search?o=desc&q=ruby&s=repositories&type=Users&utf8=%E2%9C%93").run
 
 # We can then search stackoverflow for the username, if we find it
 # we can compare some stats and potentially build up another aspect

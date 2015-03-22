@@ -1,3 +1,4 @@
+require './db/database'
 require './lib/domain/github/processor'
 require './lib/domain/profile_base'
 require './lib/domain/github/profile'

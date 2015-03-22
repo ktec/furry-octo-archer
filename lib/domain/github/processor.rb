@@ -4,6 +4,10 @@ require 'fileutils'
 module Domain
   module Github
     class Processor
+      def initialize(start_url)
+        @start_url = start_url
+      end
+
       def process_page(page)
         save_page(page)
 
@@ -24,8 +28,7 @@ module Domain
       end
 
       def run
-        start_url = "https://github.com/search?o=desc&q=ruby&s=repositories&type=Users&utf8=%E2%9C%93"
-        Anemone.crawl(start_url, :depth_limit => 3) do |anemone|
+        Anemone.crawl(@start_url, :depth_limit => 3) do |anemone|
           anemone.focus_crawl { |page|
             filter(page.links)
           }

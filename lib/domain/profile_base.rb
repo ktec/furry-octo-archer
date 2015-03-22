@@ -22,17 +22,16 @@ module Domain
       end
     end
 
-    private
-    def find_by_attributes
-      attributes
-    end
-
     def attributes
       @attributes.each_with_object({}) {|(k,v),o|
         o[k.to_sym]=safe_get_attribute(k)
       }
     end
 
+    private
+    def find_by_attributes
+      attributes
+    end
 
     def safe_get_attribute(attr)
       begin

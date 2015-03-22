@@ -1,4 +1,6 @@
 require 'byebug'
+require 'fakeweb'
+require './lib/domain/github'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -6,12 +8,14 @@ RSpec.configure do |config|
   end
 
   config.before(:all) do
+    FakeWeb.allow_net_connect = false
   end
 
   config.after(:all) do
   end
 
   config.after(:each) do
+    FakeWeb.clean_registry
   end
 
   config.mock_with :rspec do |mocks|
