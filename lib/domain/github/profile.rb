@@ -12,6 +12,8 @@ module Domain
           location: %{css("[class='vcard-detail'][itemprop='homeLocation']").text},
           join_date: %{css("[class='join-date']").first["datetime"]},
           followers: Proc.new{%{css("[class='vcard-stat'][href='/#{username}/followers']").css("strong").text}},
+          stars: Proc.new{%{css("[class='vcard-stat'][href='/stars/#{username}']").css("strong").text}},
+          following: Proc.new{%{css("[class='vcard-stat'][href='/#{username}/following']").css("strong").text}},
         }
       end
 

@@ -19,6 +19,8 @@ module Domain
       it { expect(subject[:join_date]).to eq("2010-01-27T12:26:59Z") }
       it { expect(subject[:email]).to eq("cheng19840218@gmail.com") }
       it { expect(subject[:followers]).to eq("1.8k") }
+      it { expect(subject[:following]).to eq("24") }
+      it { expect(subject[:stars]).to eq("150") }
 
 
     end
