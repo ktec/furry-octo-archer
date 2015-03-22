@@ -11,6 +11,7 @@ module Domain
           email: %{css("[class='email']").text},
           location: %{css("[class='vcard-detail'][itemprop='homeLocation']").text},
           join_date: %{css("[class='join-date']").first["datetime"]},
+          followers: Proc.new{%{css("[class='vcard-stat'][href='/#{username}/followers']").css("strong").text}},
         }
       end
 

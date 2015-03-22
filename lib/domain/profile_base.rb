@@ -35,7 +35,9 @@ module Domain
 
     def safe_get_attribute(attr)
       begin
-        @doc.instance_eval(@attributes[attr])
+        query = @attributes[attr]
+        query = Proc.new{@attributes[attr]} unless query.is_a? Proc
+        @doc.instance_eval(query.call)
       rescue
         ""
       end
