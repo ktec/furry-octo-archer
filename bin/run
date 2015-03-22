@@ -1,0 +1,7 @@
+#!/bin/bash
+
+rm -rf db/database.log
+rm -rf db/example.db
+rm -rf tmp/*
+
+ruby lib/stalk.rb

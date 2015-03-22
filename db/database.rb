@@ -10,9 +10,13 @@ ActiveRecord::Base.establish_connection(
 ActiveRecord::Schema.define do
   unless ActiveRecord::Base.connection.tables.include? 'users'
     create_table :users do |table|
-        table.column :fullname, :string
-        table.column :username, :string
-        table.column :location, :string
+      table.column :github_id, :string
+      table.column :fullname, :string
+      table.column :username, :string
+      table.column :email, :string
+      table.column :worksfor, :string
+      table.column :location, :string
+      table.column :join_date, :datetime
     end
   end
   unless ActiveRecord::Base.connection.tables.include? 'projects'

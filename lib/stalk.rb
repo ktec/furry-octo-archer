@@ -2,6 +2,7 @@ require 'anemone'
 require 'byebug'
 # require 'mongo'
 require 'fileutils'
+require './lib/github_profile'
 require './db/database'
 
 INVALID_URLS = /login|search|blog|features|trending|showcases|site|about|security|plans|pricing|integrations|contact|join|explore/
@@ -12,60 +13,9 @@ def filter(links=[])
   }
 end
 
-class Profile
-  def initialize(doc)
-    @doc = doc
-  end
-
-  def valid?
-    unless fullname.empty? &&
-           username.empty? &&
-           homelocation.empty?
-      true
-    end
-  end
-
-  def attributes
-    {
-      fullname: fullname,
-      username: username,
-      location: homelocation
-    }
-  end
-
-  def details
-    "fullname:#{fullname}\t" \
-    "username:#{username}\t" \
-    "location:#{homelocation}\n"
-  end
-
-  def fullname
-    begin
-      @doc.css("[class='vcard-fullname']").text
-    rescue
-      ""
-    end
-  end
-
-  def username
-    begin
-      @doc.css("[class='vcard-username']").text
-    rescue
-      ""
-    end
-  end
-
-  def homelocation
-    begin
-      @doc.css("[class='vcard-detail'][itemprop='homeLocation']").text
-    rescue
-      ""
-    end
-  end
-end
 
 def process_page(page)
-  profile = Profile.new(page.doc)
+  profile = GithubProfile.new(page.doc)
   if profile.valid?
 
     dir = './tmp' + page.url.path
