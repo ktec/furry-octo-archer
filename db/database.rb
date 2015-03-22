@@ -17,6 +17,10 @@ ActiveRecord::Schema.define do
       table.column :worksfor, :string
       table.column :location, :string
       table.column :join_date, :datetime
+      table.column :followers, :string
+      table.column :stars, :string
+      table.column :following, :string
+      table.column :total_public_contributions_last_year, :string
     end
   end
   unless ActiveRecord::Base.connection.tables.include? 'projects'

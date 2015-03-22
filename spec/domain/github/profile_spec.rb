@@ -21,7 +21,7 @@ module Domain
       it { expect(subject[:followers]).to eq("1.8k") }
       it { expect(subject[:following]).to eq("24") }
       it { expect(subject[:stars]).to eq("150") }
-      it { expect(subject[:total_public_contributions_last_year]).to eq("2,599 total") }
+      it { expect(subject[:total_public_contributions_last_year]).to eq("2,599") }
 
 
     end

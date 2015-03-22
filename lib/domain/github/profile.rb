@@ -14,7 +14,7 @@ module Domain
           followers: Proc.new{%{css("[class='vcard-stat'][href='/#{username}/followers']").css("strong").text}},
           stars: Proc.new{%{css("[class='vcard-stat'][href='/stars/#{username}']").css("strong").text}},
           following: Proc.new{%{css("[class='vcard-stat'][href='/#{username}/following']").css("strong").text}},
-          total_public_contributions_last_year: %{css("[class='contrib-number']").first.text},
+          total_public_contributions_last_year: %{css("[class='contrib-number']").first.text.scan(/[^[A-z]]\\S*/).first},
         }
       end
 
