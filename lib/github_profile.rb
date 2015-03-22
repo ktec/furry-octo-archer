@@ -1,95 +1,45 @@
 class GithubProfile
+
   def initialize(doc)
     @doc = doc
-  end
-
-  def valid?
-    unless github_id.empty? &&
-           fullname.empty? &&
-           username.empty? &&
-           worksfor.empty? &&
-           email.empty? &&
-           homelocation.empty? &&
-           join_date.empty?
-      true
-    end
-  end
-
-  def attributes
-    {
-      github_id: github_id,
-      fullname: fullname,
-      username: username,
-      worksfor: worksfor,
-      email: email,
-      location: homelocation,
-      join_date: join_date,
+    @attributes = {
+      github_id: %{css("[class='avatar']").first['data-user']},
+      fullname: %{css("[class='vcard-fullname']").text},
+      username: %{css("[class='vcard-username']").text},
+      worksfor: %{css("[class='vcard-detail'][itemprop='worksFor']").text},
+      email: %{css("[class='email']").text},
+      location: %{css("[class='vcard-detail'][itemprop='homeLocation']").text},
+      join_date: %{css("[class='join-date']").first["datetime"]},
     }
   end
 
-  def details
-    "github_id:#{github_id}\t" \
-    "fullname:#{fullname}\t" \
-    "username:#{username}\t" \
-    "worksfor:#{worksfor}\t" \
-    "email:#{email}\t" \
-    "location:#{homelocation}\t" \
-    "join_date:#{join_date}\n"
+  def valid?
+    @attributes.map{|k,v| self.send(k).empty? if self.send(k) }.include?(false)
   end
 
-  def github_id
+  def attributes
+    @attributes.each_with_object({}) {|(k,v),o|
+      o[k.to_sym]=safe_get_attribute(k)
+    }
+  end
+
+  def serialize
+    attributes.map{|k,v| "#{k}: #{v}"}.join("\t") + "\n"
+  end
+
+  def safe_get_attribute(attr)
     begin
-      @doc.css("[class='avatar']").first["data-user"]
+      @doc.instance_eval(@attributes[attr])
     rescue
       ""
     end
   end
 
-  def fullname
-    begin
-      @doc.css("[class='vcard-fullname']").text
-    rescue
-      ""
-    end
-  end
-
-  def username
-    begin
-      @doc.css("[class='vcard-username']").text
-    rescue
-      ""
-    end
-  end
-
-  def homelocation
-    begin
-      @doc.css("[class='vcard-detail'][itemprop='homeLocation']").text
-    rescue
-      ""
-    end
-  end
-
-  def worksfor
-    begin
-      @doc.css("[class='vcard-detail'][itemprop='worksFor']").text
-    rescue
-      ""
-    end
-  end
-
-  def email
-    begin
-      @doc.css("[class='email']").text
-    rescue
-      ""
-    end
-  end
-
-  def join_date
-    begin
-      @doc.css("[class='join-date']").first["datetime"]
-    rescue
-      ""
+  def method_missing(method_sym, *arguments, &block)
+    if @attributes.include?(method_sym)
+      safe_get_attribute(method_sym)
+    else
+      super
     end
   end
 

@@ -10,7 +10,7 @@ ActiveRecord::Base.establish_connection(
 ActiveRecord::Schema.define do
   unless ActiveRecord::Base.connection.tables.include? 'users'
     create_table :users do |table|
-      table.column :github_id, :string
+      table.column :github_id, :integer
       table.column :fullname, :string
       table.column :username, :string
       table.column :email, :string

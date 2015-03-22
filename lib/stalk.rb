@@ -16,15 +16,21 @@ end
 
 def process_page(page)
   profile = GithubProfile.new(page.doc)
+
+  dir = './tmp' + page.url.path
+  FileUtils::mkdir_p dir
+  File.open(dir + '/page.html', 'a') {|f| f.write(page.body) }
+
   if profile.valid?
 
-    dir = './tmp' + page.url.path
-    FileUtils::mkdir_p dir
-    File.open(dir + '/page.html', 'a') {|f| f.write(page.body) }
+    user = User.find_or_initialize_by(profile.attributes.slice(:github_id))
 
-    File.open('./tmp/profiles.txt', 'a') {|f| f.write(profile.details) }
-    user = User.find_or_create_by(profile.attributes)
-
+    if user.new_record?
+      user.update(profile.attributes)
+      #File.open('./tmp/profiles.txt', 'a') {|f| f.write(profile.serialize) }
+      puts profile.serialize
+      user.save
+    end
   end
 end
 
