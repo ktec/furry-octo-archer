@@ -2,7 +2,7 @@ require 'anemone'
 require 'byebug'
 # require 'mongo'
 require 'fileutils'
-require './database'
+require './db/database'
 
 INVALID_URLS = /login|search|blog|features|trending|showcases|site|about|security|plans|pricing|integrations|contact|join|explore/
 
@@ -68,14 +68,14 @@ def process_page(page)
   profile = Profile.new(page.doc)
   if profile.valid?
 
-    dir = './cache' + page.url.path
+    dir = './tmp' + page.url.path
     FileUtils::mkdir_p dir
     File.open(dir + '/page.html', 'a') {|f| f.write(page.body) }
 
-    File.open('./people.txt', 'a') {|f| f.write(profile.details) }
+    File.open('./tmp/profiles.txt', 'a') {|f| f.write(profile.details) }
     user = User.find_or_create_by(profile.attributes)
 
-  end  
+  end
 end
 
 Anemone.crawl("https://github.com/search?o=desc&q=ruby&s=repositories&type=Users&utf8=%E2%9C%93", :depth_limit => 3) do |anemone|
