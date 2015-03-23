@@ -14,15 +14,15 @@ module Domain
         # we don't really know what kind of page this is
         # so we just have to try the ones we know about?
         # there must be a better pattern for this...
-        
-        profile = UserProfile.new(page.doc)
-        profile.save
+        # maybe Page.has_a(processer)
 
-        #org_profile = OrgProfile(page.doc)
-        #org_profile.save
-
-        #another_page_type = AnotherPageType(page.doc)
-        #another_page_type.save
+        page = Page.new(page.doc)
+        #loop do
+          processed = page.try_process_with(PageTypes::UserProfile)
+          #processed = page.try_process_with(PageTypes::OrgProfile)
+          #processed = page.try_process_with(PageTypes::AnotherPageType)
+        #  break if processed
+        #end
 
       end
 

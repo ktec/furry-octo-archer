@@ -1,6 +1,4 @@
 require 'byebug'
-# require 'mongo'
-require './db/database'
 require './lib/domain/github'
 
 Domain::Github::Processor.new("https://github.com/search?o=desc&q=ruby&s=repositories&type=Users&utf8=%E2%9C%93").run

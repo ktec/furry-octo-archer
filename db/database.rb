@@ -32,9 +32,10 @@ ActiveRecord::Schema.define do
 end
 
 class User < ActiveRecord::Base
-    has_many :projects
+  include ActiveModel::Serialization
+  has_many :projects
 end
 
 class Project < ActiveRecord::Base
-    belongs_to :user
+  belongs_to :user
 end
