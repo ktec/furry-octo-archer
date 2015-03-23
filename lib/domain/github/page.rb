@@ -1,17 +1,25 @@
 module Domain
   module Github
+    WrongTemplateError = Class.new(TypeError)
     class Page
+      attr_accessor :klazzes
+
       def initialize(doc)
         @doc = doc
       end
 
-      def try_process_with(p)
-        doc = p.new(@doc)
-        if doc.valid?
-          save(doc.attributes, doc.find_by_attributes)
-        else
-          false
+      def parse
+        klazz = klazzes.next
+        begin
+          doc = klazz.new(@doc)
+          if doc.valid?
+            save(doc.attributes, doc.find_by_attributes)
+          end
+        rescue WrongTemplateError
+          parse
         end
+      rescue StopIteration
+        puts "finished..."
       end
 
       def save(attributes, find_by)
@@ -21,9 +29,7 @@ module Domain
           puts "User: #{user.username} added..."
           #File.open('./tmp/profiles.txt', 'a') {|f| f.write(serialize) }
           user.save
-          true
         end
-        false
       end
 
     end

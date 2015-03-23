@@ -17,12 +17,10 @@ module Domain
         # maybe Page.has_a(processer)
 
         page = Page.new(page.doc)
-        #loop do
-          flag = page.try_process_with(PageTypes::UserProfile)
-          #flag = page.try_process_with(PageTypes::OrgProfile) unless flag
-          #flag = page.try_process_with(PageTypes::AnotherPageType) unless flag
-        #  break if flag
-        #end
+        page.klazzes = [PageTypes::UserProfile].to_enum
+        page.parse
+
+        # , OrgProfile, AnpotherPage
 
       end
 

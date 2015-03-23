@@ -17,6 +17,7 @@ module Domain
             following: Proc.new{%{css("[class='vcard-stat'][href='/#{username}/following']").css("strong").text}},
             total_public_contributions_last_year: %{css("[class='contrib-number']").first.text.scan(/[^[A-z]]\\S*/).first},
           }
+          raise WrongTemplateError unless valid?
         end
 
         def valid?
