@@ -1,7 +1,7 @@
 module Domain
   module Github
     module PageTypes
-      class UserProfile < Github::PageType
+      class UserProfile < Base
         def initialize(doc)
           @doc = doc
           @attributes = {
