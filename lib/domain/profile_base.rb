@@ -37,7 +37,7 @@ module Domain
       begin
         query = @attributes[attr]
         query = Proc.new{@attributes[attr]} unless query.is_a? Proc
-        @doc.instance_eval(query.call)
+        send("fix_#{attr.to_s}", @doc.instance_eval(query.call))
       rescue
         ""
       end
@@ -46,6 +46,8 @@ module Domain
     def method_missing(method_sym, *arguments, &block)
       if @attributes.include?(method_sym)
         safe_get_attribute(method_sym)
+      elsif method_sym.to_s =~ /^fix_(.*)$/
+        arguments[0]
       else
         super
       end

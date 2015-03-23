@@ -23,6 +23,26 @@ module Domain
         attributes.slice(:github_id)
       end
 
+      def fix_github_id(val)
+        val.to_i
+      end
+
+      def fix_following(val)
+        val.to_i
+      end
+
+      def fix_stars(val)
+        val.to_i
+      end
+
+      def fix_total_public_contributions_last_year(val)
+        val.gsub(/[^\d]/, '').to_i
+      end
+
+      def fix_followers(val)
+        (val[-1] == 'k' ? val[0...-1].to_f * 1000 : val).to_i
+      end
+
     end
   end
 end
