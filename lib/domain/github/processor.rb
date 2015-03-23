@@ -18,10 +18,10 @@ module Domain
 
         page = Page.new(page.doc)
         #loop do
-          processed = page.try_process_with(PageTypes::UserProfile)
-          #processed = page.try_process_with(PageTypes::OrgProfile)
-          #processed = page.try_process_with(PageTypes::AnotherPageType)
-        #  break if processed
+          flag = page.try_process_with(PageTypes::UserProfile)
+          #flag = page.try_process_with(PageTypes::OrgProfile) unless flag
+          #flag = page.try_process_with(PageTypes::AnotherPageType) unless flag
+        #  break if flag
         #end
 
       end
