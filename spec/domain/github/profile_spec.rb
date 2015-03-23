@@ -2,7 +2,7 @@ require "spec_helper"
 
 module Domain
   module Github
-    describe Profile do
+    describe UserProfile do
       let(:html_doc) {
         f = File.open("./fixtures/page.html")
         doc = Nokogiri::XML(f)
@@ -10,7 +10,7 @@ module Domain
         doc
       }
 
-      subject { Profile.new(html_doc).attributes }
+      subject { described_class.new(html_doc).attributes }
 
       it { expect(subject[:github_id]).to eq(190846) }
       it { expect(subject[:username]).to eq("RubyLouvre") }

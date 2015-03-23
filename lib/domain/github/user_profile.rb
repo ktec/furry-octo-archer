@@ -1,6 +1,6 @@
 module Domain
   module Github
-    class Profile < Domain::ProfileBase
+    class UserProfile < Domain::ProfileBase
       def initialize(doc)
         @doc = doc
         @attributes = {

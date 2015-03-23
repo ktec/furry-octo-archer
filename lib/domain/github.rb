@@ -1,7 +1,7 @@
 require './db/database'
 require './lib/domain/github/processor'
 require './lib/domain/profile_base'
-require './lib/domain/github/profile'
+require './lib/domain/github/user_profile'
 
 module Domain
   module Github

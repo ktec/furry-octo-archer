@@ -11,8 +11,19 @@ module Domain
       def process_page(page)
         save_page(page)
 
-        profile = Profile.new(page.doc)
+        # we don't really know what kind of page this is
+        # so we just have to try the ones we know about?
+        # there must be a better pattern for this...
+        
+        profile = UserProfile.new(page.doc)
         profile.save
+
+        #org_profile = OrgProfile(page.doc)
+        #org_profile.save
+
+        #another_page_type = AnotherPageType(page.doc)
+        #another_page_type.save
+
       end
 
       def save_page(page)
