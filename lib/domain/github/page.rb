@@ -4,22 +4,29 @@ module Domain
     class Page
       attr_accessor :klazzes
 
-      def initialize(doc)
-        @doc = doc
+      def initialize(page)
+        @page = page
       end
 
       def parse
         klazz = klazzes.next
         begin
-          doc = klazz.new(@doc)
+          doc = klazz.new(@page.doc)
           if doc.valid?
             save(doc.attributes, doc.find_by_attributes)
           end
         rescue WrongTemplateError
+          write_page
           parse
         end
       rescue StopIteration
         puts "finished..."
+      end
+
+      def write_page
+        dir = './tmp' + @page.url.path
+        FileUtils::mkdir_p dir
+        File.open(dir + '/page.html', 'a') {|f| f.write(@page.body) }
       end
 
       def save(attributes, find_by)

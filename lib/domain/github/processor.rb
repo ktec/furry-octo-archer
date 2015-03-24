@@ -9,25 +9,18 @@ module Domain
       end
 
       def process_page(page)
-        save_page(page)
 
         # we don't really know what kind of page this is
         # so we just have to try the ones we know about?
         # there must be a better pattern for this...
         # maybe Page.has_a(processer)
 
-        page = Page.new(page.doc)
+        page = Page.new(page)
         page.klazzes = [PageTypes::UserProfile].to_enum
         page.parse
 
         # , OrgProfile, AnpotherPage
 
-      end
-
-      def save_page(page)
-        dir = './tmp' + page.url.path
-        FileUtils::mkdir_p dir
-        File.open(dir + '/page.html', 'a') {|f| f.write(page.body) }
       end
 
       def filter(links=[])

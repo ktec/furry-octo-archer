@@ -3,9 +3,9 @@ require "spec_helper"
 module Domain
   module Github
     module PageTypes
-      describe UserProfile do
+      describe UserPage do
         let(:html_doc) {
-          f = File.open("./fixtures/page.html")
+          f = File.open("./fixtures/user_page.html")
           doc = Nokogiri::XML(f)
           f.close
           doc
