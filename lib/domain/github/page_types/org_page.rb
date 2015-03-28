@@ -64,7 +64,9 @@ module Domain
               name: node.xpath("descendant::*[@itemprop='name codeRepository']").text.strip,
               description: node.xpath("descendant::*[@itemprop='description']").text.strip,
               stars: node.xpath("descendant::*[@aria-label='Stargazers']").text.strip.to_i,
-              forks: node.xpath("descendant::*[@aria-label='Forks']").text.strip.to_i
+              forks: node.xpath("descendant::*[@aria-label='Forks']").text.strip.to_i,
+              forked_from: node.xpath("descendant::*[@class='repo-list-info']/a").attr("href").text.strip,
+              updated: node.xpath("descendant::time").attr("datetime").text.strip
             }
             projects << project
           end

@@ -39,14 +39,18 @@ module Domain
             :name=>"OpenBike-API",
             :description=>"An open source multi-modal trip planner",
             :stars=>1,
-            :forks=>318
+            :forks=>318,
+            :forked_from=>"/colorado-code-for-communities/OpenBike-API",
+            :updated=>"2013-03-25T19:39:11Z"
           },
           {
             :language=>"Clojure",
             :name=>"barista",
             :description=>"Programming exercise for the Denver Clojure Users Group.",
             :stars=>0,
-            :forks=>2
+            :forks=>2,
+            :forked_from=>"/zk/barista",
+            :updated=>"2010-09-29T06:38:57Z"
           }
           ])
         }
