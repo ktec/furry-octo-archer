@@ -7,7 +7,9 @@ module Domain
           @attributes = {
             item_type: %{xpath("//*[@itemtype='http://schema.org/Organization']").attr('itemtype').text},
             email: %{css("[itemprop='email']").text},
-            projects: %{xpath(%{descendant::*[@class="repo-list-item public source"]})},
+            forked_projects: %{xpath(%{descendant::*[@class="repo-list-item public fork"]})},
+            own_projects: %{xpath(%{descendant::*[@class="repo-list-item public source"]})},
+            members: %{xpath(%{descendant::*[@class="member-avatar-group"]})},
           }
           raise WrongTemplateError unless valid?
         end
@@ -26,15 +28,43 @@ module Domain
           val.to_i
         end
 
-        def fix_projects(val)
+        def fix_own_projects(val)
           projects = []
           val.each_with_index do |node, index|
             project = {
               language: node.xpath("descendant::*[@itemprop='programmingLanguage']").text.strip,
               name: node.xpath("descendant::*[@itemprop='name codeRepository']").text.strip,
               description: node.xpath("descendant::*[@itemprop='description']").text.strip,
-              stars: node.xpath("descendant::*[@aria-label='Stargazers']").text.strip,
-              forks: node.xpath("descendant::*[@aria-label='Forks']").text.strip
+              stars: node.xpath("descendant::*[@aria-label='Stargazers']").text.strip.to_i,
+              forks: node.xpath("descendant::*[@aria-label='Forks']").text.strip.to_i
+            }
+            projects << project
+          end
+          #val.gsub(/\s/,',').split(',') - [""]
+          projects
+        end
+
+        def fix_members(val)
+          members = []
+          val.each_with_index do |node, index|
+            member = {
+              id: node.xpath("descendant::img[@class='avatar']").attr("data-user").value.to_i,
+              username: node.xpath("descendant::img[@class='avatar']").attr("alt").value
+            }
+            members << member
+          end
+          members
+        end
+
+        def fix_forked_projects(val)
+          projects = []
+          val.each_with_index do |node, index|
+            project = {
+              language: node.xpath("descendant::*[@itemprop='programmingLanguage']").text.strip,
+              name: node.xpath("descendant::*[@itemprop='name codeRepository']").text.strip,
+              description: node.xpath("descendant::*[@itemprop='description']").text.strip,
+              stars: node.xpath("descendant::*[@aria-label='Stargazers']").text.strip.to_i,
+              forks: node.xpath("descendant::*[@aria-label='Forks']").text.strip.to_i
             }
             projects << project
           end
