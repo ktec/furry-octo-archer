@@ -4,8 +4,9 @@ require 'fileutils'
 module Domain
   module Github
     class Processor
-      def initialize(start_url)
+      def initialize(start_url: , db_adapter: )
         @start_url = start_url
+        @db_adapter = db_adapter
       end
 
       def process_page(page)
@@ -16,7 +17,7 @@ module Domain
         # maybe Page.has_a(processer)
 
         page = Page.new(page)
-        page.klazzes = [PageTypes::UserProfile].to_enum
+        page.klazzes = [PageTypes::UserPage,PageTypes::OrgPage].to_enum
         page.parse
 
         # , OrgProfile, AnpotherPage

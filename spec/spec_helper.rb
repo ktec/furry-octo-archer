@@ -1,6 +1,13 @@
+$:.unshift File.join(File.dirname(__FILE__), "../lib") # current directory
+
 require 'byebug'
 require 'fakeweb'
-require './lib/domain/github'
+require 'fileutils'
+require 'anemone'
+
+require 'domain'
+require 'github'
+
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -22,3 +29,26 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 end
+
+
+class TestDomain < Domain
+  module PageTypes
+    class Type1
+      def initialize(doc)
+      end
+      def valid?
+        false
+      end
+    end
+    class Type2
+      def initialize(doc)
+        self
+      end
+      def valid?
+        false
+      end
+    end
+  end
+end
+
+include TestDomain::PageTypes
