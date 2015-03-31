@@ -10,6 +10,7 @@ describe Github::PageTypes::UserPage do
   subject { described_class.new(page) }
 
   specify { expect(subject.github_id).to eq(190846) }
+  specify { expect(subject.fullname).to eq("司徒正美") }
   specify { expect(subject.username).to eq("RubyLouvre") }
   specify { expect(subject.worksfor).to eq("qunar.com") }
   specify { expect(subject.location).to eq("China") }
