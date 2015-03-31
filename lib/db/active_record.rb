@@ -3,6 +3,18 @@ require 'active_record'
 module Db
   module_function
 
+  def save(page)
+    case page
+    when UserPage
+      byebug
+      m = Models::User.find_or_initialize_by(github_id: page.github_id)
+      m.update_attributes(page)
+      m.save
+    when OrgPage
+    #when ProjectPage
+    end
+  end
+
   def create
     ActiveRecord::Base.logger = Logger.new(File.open('./db/database.log', 'w'))
 

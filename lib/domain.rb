@@ -1,33 +1,41 @@
+require 'anemone'
+
 class Domain
-  WrongTemplateError = Class.new(TypeError)
 
   module PageTypes
   end
 
+  attr_accessor :start_url, :db_adapter
+
+  def initialize(start_url: , db_adapter: )
+    @start_url = start_url
+    @db_adapter = db_adapter
+  end
+
   def crawl(level: 1)
-    Anemone.crawl(@start_url, :depth_limit => 3) do |anemone|
+    Anemone.crawl(@start_url, :depth_limit => 1) do |anemone|
       anemone.focus_crawl { |page|
-        filter(page.links)
+        self.filter(page.links)
       }
       #anemone.storage = Anemone::Storage.SQLite3(test_file)
       #anemone.storage = Anemone::Storage.MongoDB
       #anemone.storage = Anemone::Storage.Redis
       anemone.on_every_page do |page|
-        if page.code == 200 && page.url.to_s !~ Github::INVALID_URLS
+        if page.code == 200 && page.url.to_s
           process_page(page)
         end
       end
     end
   end
 
-  private
-  def self.page_types
-    @page_types ||= self::PageTypes::constants.map {|const|
-      PageTypes.const_get(const) if Class === PageTypes.const_get(const)
+  def page_types
+    @page_types ||= self.class::PageTypes::constants.map {|const|
+      self.class::PageTypes.const_get(const) if Class === self.class::PageTypes.const_get(const)
     }.to_enum
   end
 
-  def self.process_page(page)
+  def process_page(page)
+    puts "Processing #{page.url}"
     klazz = page_types.next
     begin
       doc = klazz.new(page)
@@ -38,17 +46,20 @@ class Domain
       end
     end
   rescue StopIteration
+    page_types.rewind
     return "No template found"
   end
 
-  def self.process_template(doc)
+  def process_template(doc)
     # save to database
+    byebug
+    @db_adapter.save(doc)
   end
 
-  def self.filter(links=[])
+  def filter(links=[])
     links.select { |link|
-      link.request_uri !~ Github::INVALID_URLS
+      link.request_uri !~ Github::INVALID_PATHS
     }
   end
-  
+
 end

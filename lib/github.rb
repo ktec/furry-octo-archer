@@ -1,7 +1,8 @@
+require 'domain'
+
 class Github < Domain
 
   INVALID_PATHS=/login|search|blog|features|trending|showcases|site|about|security|plans|pricing|integrations|contact|join|explore/
-  URL="https://github.com/search?o=desc&q=ruby&s=repositories&type=Users&utf8=%E2%9C%93"
 
   module PageTypes
 
@@ -11,6 +12,10 @@ class Github < Domain
 
       def initialize(doc)
         @doc = doc
+      end
+
+      def valid?
+        false
       end
 
       def method_missing(method_sym, *arguments, &block)
@@ -62,6 +67,8 @@ class Github < Domain
       end
 
       def valid?
+        puts "Username: #{username} Github id: #{github_id}"
+        byebug if username.present?
         username.present? && github_id > 0
       end
 
@@ -77,7 +84,7 @@ class Github < Domain
       end
 
       def total_public_contributions_last_year=(query)
-        val = safely_extract(query)
+        val = safely_extract(query).to_s
         @total_public_contributions_last_year = val.gsub(/[^\d]/, '').to_i
       end
 
@@ -130,7 +137,7 @@ class Github < Domain
             updated: node.xpath("descendant::time").attr("datetime").text.strip
           }
           projects << project
-        end
+        end if val
         #val.gsub(/\s/,',').split(',') - [""]
         @forked_projects = projects
       end
@@ -147,7 +154,7 @@ class Github < Domain
             forks: node.xpath("descendant::*[@aria-label='Forks']").text.strip.to_i
           }
           projects << project
-        end
+        end if val
         @own_projects = projects
       end
 
@@ -160,7 +167,7 @@ class Github < Domain
             username: node.xpath("descendant::img[@class='avatar']").attr("alt").value
           }
           members << member
-        end
+        end if val
         @members = members
       end
 
