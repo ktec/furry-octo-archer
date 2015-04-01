@@ -2,7 +2,7 @@ require 'domain'
 
 class Github < Domain
 
-  INVALID_PATHS=/login|search|blog|features|trending|showcases|site|about|security|plans|pricing|integrations|contact|join|explore/
+  PATH_BLACKLIST=/login|search|blog|features|trending|showcases|site|about|security|plans|pricing|integrations|contact|join|explore/
 
   module PageTypes
 

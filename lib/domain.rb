@@ -2,12 +2,14 @@ require 'anemone'
 
 class Domain
 
+  PATH_BLACKLIST=/none/
+
   module PageTypes
   end
 
   attr_accessor :start_url, :db_adapter
 
-  def initialize(start_url: , db_adapter: )
+  def initialize(start_url: '', db_adapter: nil)
     @start_url = start_url
     @db_adapter = db_adapter
   end
@@ -59,7 +61,7 @@ class Domain
 
   def filter(links=[])
     links.select { |link|
-      link.request_uri !~ Github::INVALID_PATHS
+      link.request_uri !~ PATH_BLACKLIST
     }
   end
 
