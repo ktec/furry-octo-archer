@@ -39,8 +39,9 @@ class Domain
     klazz = page_types.next
     begin
       doc = klazz.new(page)
+      File.open('output.html', 'w') { |f| f.print(page.body.gsub(/\n/,'')) }
       if doc.valid?
-        process_template(doc)
+        save(doc)
       else
         process_page(page)
       end
@@ -50,7 +51,7 @@ class Domain
     return "No template found"
   end
 
-  def process_template(doc)
+  def save(doc)
     # save to database
     byebug
     @db_adapter.save(doc)
