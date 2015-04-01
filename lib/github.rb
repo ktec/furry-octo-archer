@@ -67,9 +67,7 @@ class Github < Domain
       end
 
       def valid?
-        puts "Username: #{username} Github id: #{github_id}"
-        byebug if username.present?
-        username.present? && github_id > 0
+        true unless username.empty? or github_id.zero?
       end
 
       private
@@ -101,6 +99,7 @@ class Github < Domain
     class OrgPage < BaseType
 
       attr_reader :item_type,
+                  :org_name,
                   :github_id,
                   :email,
                   :forked_projects,
@@ -110,11 +109,16 @@ class Github < Domain
       def initialize(doc)
         super
         self.item_type = %{xpath("//*[@itemtype='http://schema.org/Organization']").attr('itemtype').text}
+        self.org_name = %{xpath("//*[@class='org-name']/span").text}
         self.github_id = %{css("[class='avatar']").attr('data-user')}
         self.email = %{css("[itemprop='email']").text}
         self.forked_projects = %{xpath(%{descendant::*[@class="repo-list-item public fork"]})}
         self.own_projects = %{xpath(%{descendant::*[@class="repo-list-item public source"]})}
         self.members = %{xpath(%{descendant::*[@class="member-avatar-group"]})}
+      end
+
+      def valid?
+        true unless org_name.empty? or github_id.zero?
       end
 
       private

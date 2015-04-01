@@ -2,12 +2,14 @@ require "spec_helper"
 
 describe Github::PageTypes::UserPage do
   let(:page) {
-    f = File.open("./fixtures/user_page.html")
+    f = File.open("./spec/fixtures/github/user_page.html")
     doc = Nokogiri::HTML(f)
     f.close
     doc
   }
   subject { described_class.new(page) }
+
+  specify { expect(subject.valid?).to eq(true) }
 
   specify { expect(subject.github_id).to eq(190846) }
   specify { expect(subject.fullname).to eq("司徒正美") }

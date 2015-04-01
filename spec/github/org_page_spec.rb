@@ -2,14 +2,18 @@ require "spec_helper"
 
 describe Github::PageTypes::OrgPage do
   let(:page) {
-    f = File.open("./fixtures/org_page.html")
+    f = File.open("./spec/fixtures/github/org_page.html")
     doc = Nokogiri::HTML(f)
     f.close
     doc
   }
   subject { described_class.new(page) }
 
+  specify { expect(subject.valid?).to eq(true) }
+
+
   specify { expect(subject.item_type).to eq('http://schema.org/Organization') }
+  specify { expect(subject.org_name).to eq('Den of Clojure') }
   specify { expect(subject.github_id).to eq(2722525) }
   specify { expect(subject.email).to eq("denofclojure@gmail.com") }
   specify { expect(subject.own_projects).to eq([
